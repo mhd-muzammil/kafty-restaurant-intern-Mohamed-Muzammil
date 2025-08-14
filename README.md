@@ -1,4 +1,4 @@
-# 🫖 BontaTea Café - Tamil Nadu Restaurant Website
+# 🫖 BontaTea Cafe - Tamil Nadu Restaurant Website
 
 A modern, interactive restaurant website showcasing authentic Tamil Nadu cuisine with stunning visual effects and seamless user experience.
 
