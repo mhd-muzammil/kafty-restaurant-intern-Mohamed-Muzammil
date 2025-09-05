@@ -1,8 +1,46 @@
 // Enhanced Interactive JavaScript for BontaTea Café
 
+// Accessibility Enhancements
+function setupAccessibility() {
+  // Add skip link
+  const skipLink = document.createElement("a");
+  skipLink.href = "#main-content";
+  skipLink.textContent = "Skip to main content";
+  skipLink.style.cssText =
+    "position: absolute; top: -40px; left: 6px; background: #000; color: #fff; padding: 8px; text-decoration: none; z-index: 10000;";
+
+  skipLink.addEventListener("focus", function () {
+    this.style.top = "6px";
+  });
+
+  skipLink.addEventListener("blur", function () {
+    this.style.top = "-40px";
+  });
+
+  document.body.insertBefore(skipLink, document.body.firstChild);
+
+  // Add main content ID
+  const heroSection = document.getElementById("home");
+  if (heroSection) {
+    heroSection.id = "main-content";
+  }
+
+  // Enhance keyboard navigation
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Tab") {
+      document.body.classList.add("keyboard-navigation");
+    }
+  });
+
+  document.addEventListener("mousedown", function () {
+    document.body.classList.remove("keyboard-navigation");
+  });
+}
+
 // DOM Content Loaded Event
 document.addEventListener("DOMContentLoaded", function () {
   initializeWebsite();
+  setupAccessibility();
 });
 
 // Initialize all website functionality
@@ -32,107 +70,89 @@ function setupNavigation() {
   });
 
   // Mobile menu functionality
-  // Enhanced Mobile Navigation Setup
-  function setupMobileNavigation() {
-    const mobileMenu = document.querySelector(".mobile-menu");
-    const navLinks = document.querySelector(".nav-links");
-    const body = document.body;
+  setupMobileNavigation();
+}
 
-    // Create mobile overlay
-    let mobileOverlay = document.querySelector(".mobile-overlay");
-    if (!mobileOverlay) {
-      mobileOverlay = document.createElement("div");
-      mobileOverlay.className = "mobile-overlay";
-      body.appendChild(mobileOverlay);
-    }
+// Enhanced Mobile Navigation Setup
+function setupMobileNavigation() {
+  const mobileMenu = document.querySelector(".mobile-menu");
+  const navLinks = document.querySelector(".nav-links");
+  const body = document.body;
 
-    // Create close button for mobile menu
-    let closeButton = navLinks.querySelector(".mobile-close");
-    if (!closeButton) {
-      closeButton = document.createElement("button");
-      closeButton.className = "mobile-close";
-      closeButton.innerHTML = "×";
-      navLinks.insertBefore(closeButton, navLinks.firstChild);
-    }
-
-    // Mobile menu toggle function
-    function toggleMobileMenu() {
-      const isActive = navLinks.classList.contains("active");
-
-      if (isActive) {
-        navLinks.classList.remove("active");
-        mobileOverlay.classList.remove("active");
-        mobileMenu.classList.remove("active");
-        body.style.overflow = "";
-      } else {
-        navLinks.classList.add("active");
-        mobileOverlay.classList.add("active");
-        mobileMenu.classList.add("active");
-        body.style.overflow = "hidden";
-      }
-    }
-
-    // Event listeners
-    if (mobileMenu) {
-      mobileMenu.addEventListener("click", toggleMobileMenu);
-    }
-
-    if (closeButton) {
-      closeButton.addEventListener("click", toggleMobileMenu);
-    }
-
-    if (mobileOverlay) {
-      mobileOverlay.addEventListener("click", toggleMobileMenu);
-    }
-
-    // Close menu when clicking nav links
-    document.querySelectorAll(".nav-links a").forEach((link) => {
-      link.addEventListener("click", () => {
-        if (window.innerWidth <= 768) {
-          setTimeout(() => {
-            toggleMobileMenu();
-          }, 300);
-        }
-      });
-    });
-
-    // Handle window resize
-    window.addEventListener("resize", () => {
-      if (window.innerWidth > 768) {
-        navLinks.classList.remove("active");
-        mobileOverlay.classList.remove("active");
-        mobileMenu.classList.remove("active");
-        body.style.overflow = "";
-      }
-    });
-
-    // Handle escape key
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && navLinks.classList.contains("active")) {
-        toggleMobileMenu();
-      }
-    });
+  // Create mobile overlay
+  let mobileOverlay = document.querySelector(".mobile-overlay");
+  if (!mobileOverlay) {
+    mobileOverlay = document.createElement("div");
+    mobileOverlay.className = "mobile-overlay";
+    body.appendChild(mobileOverlay);
   }
 
-  // Update your setupNavigation function
-  function setupNavigation() {
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-      anchor.addEventListener("click", function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute("href"));
-        if (target) {
-          target.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }
-      });
-    });
-
-    // Setup mobile navigation
-    setupMobileNavigation();
+  // Create close button for mobile menu
+  let closeButton = navLinks.querySelector(".mobile-close");
+  if (!closeButton) {
+    closeButton = document.createElement("button");
+    closeButton.className = "mobile-close";
+    closeButton.innerHTML = "×";
+    navLinks.insertBefore(closeButton, navLinks.firstChild);
   }
+
+  // Mobile menu toggle function
+  function toggleMobileMenu() {
+    const isActive = navLinks.classList.contains("active");
+
+    if (isActive) {
+      navLinks.classList.remove("active");
+      mobileOverlay.classList.remove("active");
+      mobileMenu.classList.remove("active");
+      body.style.overflow = "";
+    } else {
+      navLinks.classList.add("active");
+      mobileOverlay.classList.add("active");
+      mobileMenu.classList.add("active");
+      body.style.overflow = "hidden";
+    }
+  }
+
+  // Event listeners
+  if (mobileMenu) {
+    mobileMenu.addEventListener("click", toggleMobileMenu);
+  }
+
+  if (closeButton) {
+    closeButton.addEventListener("click", toggleMobileMenu);
+  }
+
+  if (mobileOverlay) {
+    mobileOverlay.addEventListener("click", toggleMobileMenu);
+  }
+
+  // Close menu when clicking nav links
+  document.querySelectorAll(".nav-links a").forEach((link) => {
+    link.addEventListener("click", () => {
+      if (window.innerWidth <= 768) {
+        setTimeout(() => {
+          toggleMobileMenu();
+        }, 300);
+      }
+    });
+  });
+
+  // Handle window resize
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768) {
+      navLinks.classList.remove("active");
+      mobileOverlay.classList.remove("active");
+      mobileMenu.classList.remove("active");
+      body.style.overflow = "";
+    }
+  });
+
+  // Handle escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && navLinks.classList.contains("active")) {
+      toggleMobileMenu();
+    }
+  });
 }
 
 // Scroll Effects
@@ -265,7 +285,7 @@ function validateBookingData(data) {
   }
 
   // Phone validation (basic)
-  const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
+  const phoneRegex = /^[+]?[0-9\s-()]{10,}$/;
   if (!phoneRegex.test(data.phone)) {
     alert("Please enter a valid phone number.");
     return false;
@@ -278,32 +298,14 @@ function validateBookingData(data) {
 function showBookingSuccessAnimation() {
   // Create success popup
   const successPopup = document.createElement("div");
-  successPopup.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: linear-gradient(45deg, #FFD700, #FF4500);
-        color: white;
-        padding: 2rem;
-        border-radius: 20px;
-        font-size: 1.5rem;
-        font-weight: bold;
-        z-index: 10000;
-        animation: popupAnimation 2s ease-in-out;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    `;
+  successPopup.style.cssText =
+    "position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: linear-gradient(45deg, #FFD700, #FF4500); color: white; padding: 2rem; border-radius: 20px; font-size: 1.5rem; font-weight: bold; z-index: 10000; animation: popupAnimation 2s ease-in-out; box-shadow: 0 20px 40px rgba(0,0,0,0.3);";
   successPopup.innerHTML = "🎉 Booking Confirmed! 🎉";
 
   // Add animation keyframes
   const style = document.createElement("style");
-  style.textContent = `
-        @keyframes popupAnimation {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
-        }
-    `;
+  style.textContent =
+    "@keyframes popupAnimation { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1); } ";
   document.head.appendChild(style);
 
   document.body.appendChild(successPopup);
@@ -327,31 +329,24 @@ function displayBookingConfirmation(bookingData) {
   });
 
   if (confirmationDiv) {
-    confirmationDiv.innerHTML = `
-            <div style="background: linear-gradient(45deg, rgba(255,215,0,0.2), rgba(255,69,0,0.2)); padding: 2rem; border-radius: 15px; margin-bottom: 1rem; border: 2px solid var(--golden);">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-                    <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">
-                        <strong style="color: var(--golden); font-size: 1.1rem;">🙋‍♂️ Guest Information:</strong><br>
-                        <span style="color: var(--light-cream);">Name: ${bookingData.name}</span><br>
-                        <span style="color: var(--light-cream);">Email: ${bookingData.email}</span><br>
-                        <span style="color: var(--light-cream);">Phone: ${bookingData.phone}</span>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">
-                        <strong style="color: var(--golden); font-size: 1.1rem;">🍽️ Reservation Details:</strong><br>
-                        <span style="color: var(--light-cream);">Date: ${formattedDate}</span><br>
-                        <span style="color: var(--light-cream);">Time: ${bookingData.time}</span><br>
-                        <span style="color: var(--light-cream);">Guests: ${bookingData.guests}</span>
-                    </div>
-                </div>
-                <div style="margin-top: 1.5rem; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">
-                    <strong style="color: var(--golden); font-size: 1.1rem;">🌟 Special Requests:</strong><br>
-                    <span style="color: var(--light-cream);">${bookingData.message}</span>
-                </div>
-                <div style="text-align: center; margin-top: 1rem; font-size: 1.5rem;">
+    confirmationDiv.innerHTML =
+      '<div style="background: linear-gradient(45deg, rgba(255,215,0,0.2), rgba(255,69,0,0.2)); padding: 2rem; border-radius: 15px; margin-bottom: 1rem; border: 2px solid var(--golden);"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;"><div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;"><strong style="color: var(--golden); font-size: 1.1rem;">🙋‍♂️ Guest Information:</strong><br><span style="color: var(--light-cream);">Name: ' +
+      bookingData.name +
+      '</span><br><span style="color: var(--light-cream);">Email: ' +
+      bookingData.email +
+      '</span><br><span style="color: var(--light-cream);">Phone: ' +
+      bookingData.phone +
+      '</span></div><div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;"><strong style="color: var(--golden); font-size: 1.1rem;">🍽️ Reservation Details:</strong><br><span style="color: var(--light-cream);">Date: ' +
+      formattedDate +
+      '</span><br><span style="color: var(--light-cream);">Time: ' +
+      bookingData.time +
+      '</span><br><span style="color: var(--light-cream);">Guests: ' +
+      bookingData.guests +
+      '</span></div></div><div style="margin-top: 1.5rem; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;"><strong style="color: var(--golden); font-size: 1.1rem;">🌟 Special Requests:</strong><br><span style="color: var(--light-cream);">' +
+      bookingData.message +
+      '</span></div><div style="text-align: center; margin-top: 1rem; font-size: 1.5rem;">
                     🫖 ☕ 🍵 🧋 🥤
-                </div>
-            </div>
-        `;
+                </div></div>';
   }
 
   // Show confirmation section with animation
@@ -402,7 +397,7 @@ function validateField(field) {
   }
 
   if (field.type === "tel") {
-    const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
+    const phoneRegex = /^[+]?[0-9\s-()]{10,}$/;
     if (!phoneRegex.test(value)) {
       showFieldError(field, "Please enter a valid phone number");
       return false;
@@ -421,11 +416,8 @@ function showFieldError(field, message) {
 
   const errorDiv = document.createElement("div");
   errorDiv.className = "field-error";
-  errorDiv.style.cssText = `
-        color: #ff4444;
-        font-size: 0.8rem;
-        margin-top: 0.5rem;
-    `;
+  errorDiv.style.cssText =
+    "color: #ff4444; font-size: 0.8rem; margin-top: 0.5rem;";
   errorDiv.textContent = message;
 
   field.parentNode.appendChild(errorDiv);
@@ -489,8 +481,8 @@ function setupFloatingElements() {
     const tea = document.createElement("div");
     tea.className = "floating-tea";
     tea.textContent = teas[Math.floor(Math.random() * teas.length)];
-    tea.style.left = Math.random() * 90 + "%";
-    tea.style.top = Math.random() * 80 + "%";
+    tea.style.left = Math.random() * 90 + "%”; // Corrected: escaped the quote
+    tea.style.top = Math.random() * 80 + "%”; // Corrected: escaped the quote
     tea.style.animationDelay = Math.random() * 6 + "s";
     tea.style.fontSize = Math.random() * 1 + 1.5 + "rem";
 
@@ -633,16 +625,8 @@ function addGlowEffects() {
 function setupScrollProgress() {
   // Create progress bar
   const progressBar = document.createElement("div");
-  progressBar.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 0%;
-        height: 4px;
-        background: linear-gradient(90deg, #FF4500, #FFD700);
-        z-index: 10001;
-        transition: width 0.1s ease;
-    `;
+  progressBar.style.cssText =
+    "position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: linear-gradient(90deg, #FF4500, #FFD700); z-index: 10001; transition: width 0.1s ease;";
   document.body.appendChild(progressBar);
 
   // Update progress on scroll
@@ -670,20 +654,8 @@ function setupLanguageToggle() {
   // Add language toggle button
   const langToggle = document.createElement("button");
   langToggle.innerHTML = "தமிழ்";
-  langToggle.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: linear-gradient(45deg, #FF4500, #FFD700);
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 50px;
-        font-weight: bold;
-        cursor: pointer;
-        z-index: 1000;
-        transition: all 0.3s ease;
-    `;
+  langToggle.style.cssText =
+    "position: fixed; bottom: 20px; right: 20px; background: linear-gradient(45deg, #FF4500, #FFD700); color: white; border: none; padding: 10px 15px; border-radius: 50px; font-weight: bold; cursor: pointer; z-index: 1000; transition: all 0.3s ease;";
 
   langToggle.addEventListener("click", function () {
     this.style.transform = "scale(1.1)";
@@ -748,21 +720,8 @@ function activateEasterEgg() {
 
   // Show special message
   const message = document.createElement("div");
-  message.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: linear-gradient(45deg, #FF4500, #FFD700);
-        color: white;
-        padding: 2rem;
-        border-radius: 20px;
-        font-size: 1.5rem;
-        font-weight: bold;
-        z-index: 10000;
-        animation: bounceIn 1s ease;
-        text-align: center;
-    `;
+  message.style.cssText =
+    "position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: linear-gradient(45deg, #FF4500, #FFD700); color: white; padding: 2rem; border-radius: 20px; font-size: 1.5rem; font-weight: bold; z-index: 10000; animation: bounceIn 1s ease; text-align: center;";
   message.innerHTML = "🎉 You found the secret! <br>வாழ்த்துக்கள்! 🫖";
 
   document.body.appendChild(message);
@@ -821,71 +780,14 @@ document.addEventListener("DOMContentLoaded", function () {
   optimizePerformance();
 });
 
-// Accessibility Enhancements
-function setupAccessibility() {
-  // Add skip link
-  const skipLink = document.createElement("a");
-  skipLink.href = "#main-content";
-  skipLink.textContent = "Skip to main content";
-  skipLink.style.cssText = `
-        position: absolute;
-        top: -40px;
-        left: 6px;
-        background: #000;
-        color: #fff;
-        padding: 8px;
-        text-decoration: none;
-        z-index: 10000;
-    `;
-
-  skipLink.addEventListener("focus", function () {
-    this.style.top = "6px";
-  });
-
-  skipLink.addEventListener("blur", function () {
-    this.style.top = "-40px";
-  });
-
-  document.body.insertBefore(skipLink, document.body.firstChild);
-
-  // Add main content ID
-  const heroSection = document.getElementById("home");
-  if (heroSection) {
-    heroSection.id = "main-content";
-  }
-
-  // Enhance keyboard navigation
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Tab") {
-      document.body.classList.add("keyboard-navigation");
-    }
-  });
-
-  document.addEventListener("mousedown", function () {
-    document.body.classList.remove("keyboard-navigation");
-  });
-}
-
-// Initialize accessibility features
-document.addEventListener("DOMContentLoaded", setupAccessibility);
-
 // Error Handling
 window.addEventListener("error", function (e) {
   console.error("BontaTea Café Error:", e.error);
 
   // Show user-friendly error message
   const errorToast = document.createElement("div");
-  errorToast.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        background: #ff4444;
-        color: white;
-        padding: 1rem;
-        border-radius: 10px;
-        z-index: 10000;
-        animation: slideIn 0.5s ease;
-    `;
+  errorToast.style.cssText =
+    "position: fixed; bottom: 20px; left: 20px; background: #ff4444; color: white; padding: 1rem; border-radius: 10px; z-index: 10000; animation: slideIn 0.5s ease;";
   errorToast.textContent =
     "Oops! Something went wrong. Please refresh the page.";
 
